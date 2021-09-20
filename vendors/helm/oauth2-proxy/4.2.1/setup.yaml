@@ -1,0 +1,12 @@
+---
+bases:
+- ../../helmfile.yaml
+---
+repositories:
+- name: oauth2-proxy
+  url: https://oauth2-proxy.github.io/manifests
+
+releases:
+- name: oauth2-proxy
+  namespace: auth
+  version: 4.2.1

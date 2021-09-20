@@ -1,0 +1,12 @@
+---
+bases:
+- ../../helmfile.yaml
+---
+repositories:
+- name: appscode
+  url: https://charts.appscode.com/stable/
+
+releases:
+- name: kubed
+  namespace: kube-system
+  version: 0.12.0
