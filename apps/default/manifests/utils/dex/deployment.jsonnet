@@ -1,9 +1,10 @@
 local k = import 'k8s-libsonnet/1.21/main.libsonnet';
+local cfg = import '../../../configs/images.libsonnet';
 
 k.apps.v1.deployment.new(
   'abc', containers=[
     {
-      image: 'ghcr.io/dexidp/dex:v2.30.0',
+      image: '%s:%s' % [cfg.dex.image, cfg.dex.tag],
       name: 'dex',
       command: ['dex', 'serve', '/etc/dex/cfg/config.yaml'],
       ports: [

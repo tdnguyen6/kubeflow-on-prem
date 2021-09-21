@@ -2,3 +2,4 @@ helmfiles:
 - istio/1.11.2/setup.yaml
 - oauth2-proxy/4.2.1/setup.yaml
 - kubed/0.12.0/setup.yaml
+- dex/2.30.0/setup.yaml

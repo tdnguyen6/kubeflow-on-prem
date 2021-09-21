@@ -4,7 +4,7 @@ from os import path
 import subprocess
 from typing import Text
 
-base_path = "apps/default"
+base_path = "apps/default/manifests"
 
 
 def outfile(infile):
