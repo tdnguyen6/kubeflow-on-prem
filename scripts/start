@@ -1,11 +1,11 @@
-.SILENT:
-SHELL := /bin/bash
+#!/usr/bin/env bash
 
-minikube-start:
-	./mn start \
+. ./init
+
+./mn start \
 	--cpus 6 \
 	--memory 12288 \
 	--disk-size=60GB \
-	--kubernetes-version=$$K8S_VER \
+	--kubernetes-version=$K8S_VER \
 	--addons dashboard metrics-server \
 	--extra-config kubelet.runtime-request-timeout=30m0s \
