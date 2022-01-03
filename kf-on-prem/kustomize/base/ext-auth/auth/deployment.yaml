@@ -1,0 +1,45 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: auth-proxy
+spec:
+  selector:
+    app: auth-proxy
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-proxy
+  labels:
+    app: auth-proxy
+spec:
+  selector:
+    matchLabels: 
+      app: auth-proxy
+  template:
+    metadata:
+      labels:
+        app: auth-proxy
+    spec:
+      containers:
+      - name: envoy
+        image: envoyproxy/envoy-distroless-dev:e8d2b1e6c4c38da5034437f109bb940a43156540
+        args: ["-c", "/config/config.yaml"]
+        ports:
+        - containerPort:  80
+          name: http
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        imagePullPolicy: IfNotPresent
+      volumes:
+        - name: config
+          configMap:
+            name: auth-proxy
+            items:
+              - key: config.yaml
+                path: config.yaml

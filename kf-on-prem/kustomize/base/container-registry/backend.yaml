@@ -1,0 +1,60 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: container-registry-backend
+spec:
+  selector:
+    app: container-registry-backend
+  ports:
+    - name: cr-backend-http
+      port: 5000
+      targetPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: container-registry-backend
+spec:
+  selector:
+    matchLabels:
+      app: container-registry-backend
+  template:
+    metadata:
+      labels:
+        app: container-registry-backend
+    spec:
+      containers:
+        - name: registry
+          image: registry
+          ports:
+            - containerPort: 5000
+              name: cr-backend-http
+          volumeMounts:
+            - mountPath: /var/lib/registry
+              name: container-registry-data
+            - name: container-registry-config
+              mountPath: /etc/docker/registry
+          imagePullPolicy: IfNotPresent
+      volumes:
+        - name: container-registry-config
+          configMap:
+            name: container-registry-backend
+            items:
+              - key: config.yml
+                path: config.yml
+        - name: container-registry-data
+          emptyDir: {}
+          # persistentVolumeClaim:
+          #   claimName: container-registry-backend
+      restartPolicy: Always
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: container-registry-backend
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 10Gi

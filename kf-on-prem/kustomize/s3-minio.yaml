@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: tidu-nguyen-2000
+  name: s3-sa
+secrets:
+  - name: s3-secret
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: tidunguyen-aol
+  name: s3-sa
+secrets:
+  - name: s3-secret
+

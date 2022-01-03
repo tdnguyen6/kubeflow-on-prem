@@ -1,0 +1,5 @@
+- op: remove
+  path: /data/gateway.kubeflow.kubeflow-gateway
+- op: add
+  path: /data/gateway.knative-serving.knative-ingress-gateway
+  value: istio-ingressgateway.istio-system.svc.cluster.local

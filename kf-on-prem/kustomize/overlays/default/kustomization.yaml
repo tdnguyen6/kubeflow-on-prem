@@ -1,0 +1,54 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+patchesStrategicMerge:
+  - centraldashboard/links.yaml
+  - centraldashboard/params.yaml
+
+  - dex/config.yaml
+  - dex/service.yaml
+
+  - ext-auth/envoy-filter.yaml
+  - ext-auth/oidc-authservice.yaml
+  - ext-auth/istio-external.yaml
+
+  - knative/monitoring/config.yaml
+  - knative/serving/domain.yaml
+
+  - kserve/isvc-ingress.yaml
+  
+  - kubeflow-gateway.yaml
+
+  - jupyter-web-app/logos.yaml
+
+
+patchesJson6902:
+  - target:
+      version: v1
+      kind: ConfigMap
+      name: config-istio
+      namespace: knative-serving
+    path: knative/serving/config-istio-patch.yaml
+
+patches:
+  - target:
+      name: ".*authservice.*"
+      namespace: istio-system
+    path: ext-auth/oidc-auth-ns.yaml
+  - target:
+      name: "jupyter-web-app-config-*"
+      kind: ConfigMap
+      namespace: kubeflow
+    path: jupyter-web-app/spawner_ui_patch.yaml
+
+
+images:
+  - name: quay.io/dexidp/dex
+    newName: ghcr.io/dexidp/dex
+    newTag: v2.30.0
+#   - name: public.ecr.aws/j1r0q0g6/notebooks/profile-controller
+#     newName: cr.tidu.giize.com/profile-controller
+#     newTag: v1.3.1-rc.0

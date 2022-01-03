@@ -1,0 +1,49 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dex
+  namespace: auth
+data:
+  config.yaml: |
+    issuer: https://kubeflow.k8s.tidu.giize.com/dex
+    storage:
+      type: kubernetes
+      config:
+        inCluster: true
+    web:
+      http: 0.0.0.0:5556
+    logger:
+      level: "debug"
+      format: text
+    enablePasswordDB: true
+    oauth2:
+      skipApprovalScreen: true
+    alwaysShowLoginScreen: true
+    connectors:
+      - type: github
+        id: github
+        name: GitHub
+        config:
+          clientID: 24f5169896f551edc101
+          clientSecret: f0559fee88d11a1be36217dd47cb88b1e74c35bc
+          redirectURI: https://kubeflow.k8s.tidu.giize.com/dex/callback
+          useLoginAsID: false
+      - type: google
+        id: google
+        name: Google
+        config:
+          clientID: 98134702542-k8n7mdo7fgdhfeeemp0nftj94qdjvlfq.apps.googleusercontent.com
+          clientSecret: M3f02o0q9ERS64kQqzJw-mTZ
+          redirectURI: https://kubeflow.k8s.tidu.giize.com/dex/callback
+          useLoginAsID: false
+    staticPasswords:
+    - email: tidunguyen@aol.com
+      hash: $2a$10$Q8U8ygJQGQNgkfi.H1BBDuVHENV5YMgGyj144T3ygUyoOAO/bXT7W
+      username: tidunguyen
+    staticClients:
+    - id: kubeflow-oidc-authservice
+      redirectURIs:
+      - '/login/oidc'
+      name: 'Dex Login Application'
+      secret: pUBnBOY80SnXgjibTYM9ZWNzY2xreNGQok

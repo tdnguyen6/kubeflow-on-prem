@@ -1,0 +1,9 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: on-prem-1.3
+nodes:
+- role: control-plane
+  image: kindest/node:v1.20.7@sha256:cbeaf907fc78ac97ce7b625e4bf0de16e3ea725daf6b04f930bd14c67c671ff9
+networking:
+  podSubnet: "10.0.0.0/16"
+  serviceSubnet: "10.96.0.0/12"

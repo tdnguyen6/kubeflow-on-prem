@@ -1,0 +1,18 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: oidc-authservice-parameters
+  namespace: istio-system
+data:
+  OIDC_PROVIDER: https://kubeflow.k8s.tidu.giize.com/dex
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: authservice-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 0.5Gi
