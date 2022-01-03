@@ -1,0 +1,72 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  # Cert-Manager
+  # - https://github.com/jetstack/cert-manager/releases/download/v1.5.4/cert-manager.yaml
+  - cert-manager.yaml
+  # Istio
+  - ../../../upstream-manifests/common/istio-1-9/istio-crds/base
+  - ../../../upstream-manifests/common/istio-1-9/istio-namespace/base
+  - ../../../upstream-manifests/common/istio-1-9/istio-install/base
+  # OIDC Authservice
+  - ../../../upstream-manifests/common/oidc-authservice/base
+  # Dex
+  - ../../../upstream-manifests/common/dex/base
+  # KNative
+  - ../../../upstream-manifests/common/knative/knative-serving/base
+  - ../../../upstream-manifests/common/knative/knative-eventing/base
+  - ../../../upstream-manifests/common/istio-1-9/cluster-local-gateway/base
+  - https://github.com/knative/serving/releases/download/v0.17.4/monitoring-core.yaml
+  - https://github.com/knative/serving/releases/download/v0.17.4/monitoring-metrics-prometheus.yaml
+  # Kubeflow namespace
+  - ../../../upstream-manifests/common/kubeflow-namespace/base
+  # Kubeflow Roles
+  - ../../../upstream-manifests/common/kubeflow-roles/base
+  # Kubeflow Istio Resources
+  - ../../../upstream-manifests/common/istio-1-9/kubeflow-istio-resources/base
+
+  # Kubeflow Pipelines
+  - ../../../upstream-manifests/apps/pipeline/upstream/env/platform-agnostic-multi-user
+  # KFServing
+  # ../- ../../../apps/kfserving/upstream/overlays/kubeflow # old kfserving
+  - https://raw.githubusercontent.com/kserve/kserve/v0.6.1/install/v0.6.1/kfserving_kubeflow.yaml
+  # Katib
+  - ../../../upstream-manifests/apps/katib/upstream/installs/katib-with-kubeflow
+  # Central Dashboard
+  - ../../../upstream-manifests/apps/centraldashboard/upstream/overlays/istio
+  # Admission Webhook
+  - ../../../upstream-manifests/apps/admission-webhook/upstream/overlays/cert-manager
+  # Notebook Controller
+  - ../../../upstream-manifests/apps/jupyter/jupyter-web-app/upstream/overlays/istio
+  # Jupyter Web App
+  - ../../../upstream-manifests/apps/jupyter/notebook-controller/upstream/overlays/kubeflow
+  # Profiles + KFAM
+  - ../../../upstream-manifests/apps/profiles/upstream/overlays/kubeflow
+  # Volumes Web App
+  - ../../../upstream-manifests/apps/volumes-web-app/upstream/overlays/istio
+  # Tensorboards Web App
+  - ../../../upstream-manifests/apps/tensorboard/tensorboard-controller/upstream/overlays/kubeflow
+  # Tensorboard Controller
+  - ../../../upstream-manifests/apps/tensorboard/tensorboards-web-app/upstream/overlays/istio
+  # TFJob Operator
+  - ../../../upstream-manifests/apps/tf-training/upstream/overlays/kubeflow
+  # Pytorch Operator
+  - ../../../upstream-manifests/apps/pytorch-job/upstream/overlays/kubeflow
+  # MPI Operator
+  - ../../../upstream-manifests/apps/mpi-job/upstream/overlays/kubeflow
+  # MXNet Operator
+  - ../../../upstream-manifests/apps/mxnet-job/upstream/overlays/kubeflow
+  # XGBoost Operator
+  - ../../../upstream-manifests/apps/xgboost-job/upstream/overlays/kubeflow
+
+  # kf-on-prem distribution resources
+  - ext-auth
+  - dex
+  - knative
+  - kserve
+  - notebook-ci
+  - centraldashboard
+  - container-registry
+  - minio-virtualservice.yaml
+  - s3-minio.yaml

@@ -1,0 +1,4 @@
+[submodule "upstream-manifests"]
+	path = upstream-manifests
+	url = https://github.com/kubeflow/manifests
+	branch = v1.3-branch
