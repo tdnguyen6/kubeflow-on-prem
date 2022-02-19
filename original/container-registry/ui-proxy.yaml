@@ -1,0 +1,44 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: container-registry-ui
+spec:
+  selector:
+    app: container-registry-ui
+  ports:
+    - name: cr-backend-http
+      port: 80
+      targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: container-registry-ui
+spec:
+  selector:
+    matchLabels:
+      app: container-registry-ui
+  template:
+    metadata:
+      labels:
+        app: container-registry-ui
+    spec:
+      containers:
+        - name: registry-ui
+          image: joxit/docker-registry-ui
+          env:
+            - name: REGISTRY_TITLE
+              value: cr.k8s.tidu.giize.com
+            - name: NGINX_PROXY_PASS_URL
+              value: http://container-registry-backend:5000
+            - name: SINGLE_REGISTRY
+              value: "true"
+            - name: DELETE_IMAGES
+              value: "true"
+            - name: SHOW_CONTENT_DIGEST
+              value: "true"
+          ports:
+            - containerPort: 80
+              name: cr-ui-http
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always

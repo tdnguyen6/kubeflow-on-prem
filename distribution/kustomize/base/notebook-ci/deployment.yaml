@@ -1,11 +1,3 @@
-apiVersion: v1
-data:
-  .dockerconfigjson: eyJhdXRocyI6eyJjci50aWR1LmdpaXplLmNvbSI6eyJ1c2VybmFtZSI6InRpZHVuZ3V5ZW4iLCJwYXNzd29yZCI6ImNyLTAzMDZ1RGlUIiwiYXV0aCI6ImRHbGtkVzVuZFhsbGJqcGpjaTB3TXpBMmRVUnBWQT09In19fQ==
-kind: Secret
-metadata:
-  name: regcred
-type: kubernetes.io/dockerconfigjson
----
 kind: Service
 apiVersion: v1
 metadata:
@@ -33,15 +25,17 @@ spec:
       serviceAccountName: kubeflow-notebook-ci
       containers:
         - name: kubeflow-notebook-ci
-          image: cr.tidu.giize.com/kubeflow-notebook-ci
+          image: ghcr.io/tidunguyen/kubeflow-notebook-ci
           ports:
             - containerPort: 4004
-          # volumeMounts:
-          #   - mountPath: /var/lib/registry
-          #     name: container-registry-data
-          #   - name: container-registry-config
-          #     mountPath: /etc/docker/registry
           imagePullPolicy: Always
+          volumeMounts:
+            - name: dotenv
+              mountPath: /app/server/.env
+              subPath: server.env
+            - name: dotenv
+              mountPath: /app/monitor/.env
+              subPath: monitor.env
         - name: db
           image: postgres
           env:
@@ -52,33 +46,15 @@ spec:
             - name: POSTGRES_PASSWORD
               value: pg
           volumeMounts:
-            - mountPath: /var/lib/postgresql
-              name: db
+            - name: db
+              mountPath: /var/lib/postgresql/data
           imagePullPolicy: IfNotPresent
-      imagePullSecrets:
-        - name: regcred
       volumes:
-        # - name: container-registry-config
-        #   configMap:
-        #     name: kubeflow-notebook-ci
-        #     items:
-        #       - key: config.yml
-        #         path: config.yml
-        # - name: container-registry-data
-        #   emptyDir: {}
+        - name: dotenv
+          configMap:
+            name: kubeflow-notebook-ci
         - name: db
-          emptyDir: {}
-      # persistentVolumeClaim:
-      #   claimName: kubeflow-notebook-ci
+          persistentVolumeClaim:
+            claimName: kubeflow-notebook-ci
       restartPolicy: Always
-# ---
-# apiVersion: v1
-# kind: PersistentVolumeClaim
-# metadata:
-#   name: kubeflow-notebook-ci
-# spec:
-#   accessModes:
-#     - ReadWriteOnce
-#   resources:
-#     requests:
-#       storage: 10Gi
+

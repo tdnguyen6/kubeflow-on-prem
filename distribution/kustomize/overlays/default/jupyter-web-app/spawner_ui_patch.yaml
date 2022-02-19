@@ -33,11 +33,11 @@
         # The annotation `notebooks.kubeflow.org/http-rewrite-uri: /`
         # is applied to notebook in this group, configuring
         # the Istio rewrite for containers that host their web UI at `/`
-        value: cr.tidu.giize.com/kf-vscode-ssh:miniconda3
+        value: ghcr.io/tidunguyen/vscode-ssh:miniconda3
         # The list of available standard container Images
         options:
-        - cr.tidu.giize.com/kf-vscode-ssh:miniconda3
-        - cr.tidu.giize.com/kf-vscode-ssh:base
+        - ghcr.io/tidunguyen/vscode-ssh:miniconda3
+        - ghcr.io/tidunguyen/vscode-ssh:base
         - public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/codeserver-python:v1.3.1-rc.0
       imageGroupTwo:
         # The container Image for the user's Group Two Server

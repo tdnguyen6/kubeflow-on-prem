@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubeflow-notebook-ci
+data:
+  monitor.env: |
+    TRACKING_DIR=/data/tracking
+    BUILDING_DIR=/data/building
+    SLEEP_TIME_SEC=10
+    BACKEND_HOST=http://localhost:4004
+  server.env: |
+    SERVER.HOST=0.0.0.0
+    SERVER.PORT=4004
+    SERVER.BASE_PATH=/
+    DATABASE_URL=postgres://pg:pg@localhost/pg
+    DATABASE_MAXCON=30
+    DEFAULT_IMAGE_NAME=tmp_img
+    KUBEFLOW.USERID_HEADER=kubeflow-userid
+    KUBEFLOW.NOTEBOOK_RESOURCE=notebooks.kubeflow.org
+    KUBEFLOW.PROFILE_RESOURCE=profiles.kubeflow.org
+    SQLX_OFFLINE=true
+

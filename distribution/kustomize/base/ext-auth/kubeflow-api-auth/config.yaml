@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubeflow-api-auth
+data:
+  server.env: |
+    SERVER.HOST=0.0.0.0
+    SERVER.PORT=3002
+    DATABASE_MAXCON=30
+    DATABASE_URL=postgres://pg:pg@localhost/pg
+    JWT_SECRET=jwt123
+    RECAPTCHA.SECRET=6Lfv2RAdAAAAAAKsb0fVc0Zh14E0vAKbcnfB16yJ
+    RECAPTCHA.SITE_KEY=6Lfv2RAdAAAAAAU_aV60u8YTFl07HQmYnOTinvoU
+    KUBEFLOW.USERID_HEADER=kubeflow-userid
+    KUBEFLOW.NOTEBOOK_RESOURCE=notebooks.kubeflow.org
+    KUBEFLOW.MODEL_RESOURCE=inferenceservices.serving.kubeflow.org
+    KUBEFLOW.PROFILE_RESOURCE=profiles.kubeflow.org
+    KUBEFLOW.INTERACTIVE_ENDPOINT=https://kubeflow.k8s.tidu.giize.com
+    SQLX_OFFLINE=true
+
+

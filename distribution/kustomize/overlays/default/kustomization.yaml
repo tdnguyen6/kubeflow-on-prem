@@ -50,5 +50,5 @@ images:
     newName: ghcr.io/dexidp/dex
     newTag: v2.30.0
 #   - name: public.ecr.aws/j1r0q0g6/notebooks/profile-controller
-#     newName: cr.tidu.giize.com/profile-controller
+#     newName: ghcr.io/tidunguyen/profile-controller
 #     newTag: v1.3.1-rc.0

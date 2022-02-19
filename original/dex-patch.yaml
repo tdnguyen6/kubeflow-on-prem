@@ -1,0 +1,9 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: dex
+  namespace: auth
+spec:
+  gateways:
+    - container-registry/container-registry-ingressgateway
+    - kubeflow/kubeflow-gateway

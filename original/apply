@@ -1,0 +1,3 @@
+#! /usr/bin/env zsh
+
+while ! ./kustomize build . | minikube kubectl -p kf-1.3-default -- apply -f -; do echo "Retrying to apply resources"; sleep 10; done

@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: container-registry-backend
+data:
+  config.yml: |
+    version: 0.1
+    log:
+      fields:
+        service: registry
+    storage:
+      delete:
+        enabled: true
+      cache:
+        blobdescriptor: inmemory
+      filesystem:
+        rootdirectory: /var/lib/registry
+    http:
+      addr: :5000
+      headers:
+        X-Content-Type-Options: [nosniff]
+        Access-Control-Allow-Origin: ['http://localhost']
+        Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS', 'DELETE']
+        Access-Control-Allow-Headers: ['Authorization', 'Accept']
+        Access-Control-Max-Age: [1728000]
+        Access-Control-Expose-Headers: ['Docker-Content-Digest']
+      relativeurls: true
+    auth:
+      htpasswd:
+        realm: basic-realm
+        path: /etc/docker/registry/htpasswd
+  htpasswd: |
+    tidu:$apr1$DkNovQKQ$mWx6PInXP9eQd9.82rcLZ/
+    tidunguyen:$2y$05$Dk8f2I0GVbjRnUFjCpjZDO6PacXQ2xpdf1WqnYB1x98ppsiGNsaHS

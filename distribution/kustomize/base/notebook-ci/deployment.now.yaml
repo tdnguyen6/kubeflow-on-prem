@@ -1,0 +1,74 @@
+apiVersion: v1
+data:
+  .dockerconfigjson: eyJhdXRocyI6eyJjci50aWR1LmdpaXplLmNvbSI6eyJ1c2VybmFtZSI6InRpZHVuZ3V5ZW4iLCJwYXNzd29yZCI6ImNyLTAzMDZ1RGlUIiwiYXV0aCI6ImRHbGtkVzVuZFhsbGJqcGpjaTB3TXpBMmRVUnBWQT09In19fQ==
+kind: Secret
+metadata:
+  name: regcred
+type: kubernetes.io/dockerconfigjson
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kubeflow-notebook-ci
+spec:
+  selector:
+    app: kubeflow-notebook-ci
+  ports:
+    - port: 80
+      targetPort: 4004
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubeflow-notebook-ci
+spec:
+  selector:
+    matchLabels:
+      app: kubeflow-notebook-ci
+  template:
+    metadata:
+      labels:
+        app: kubeflow-notebook-ci
+    spec:
+      serviceAccountName: kubeflow-notebook-ci
+      containers:
+        - name: kubeflow-notebook-ci
+          image: ghcr.io/tidunguyen/kubeflow-notebook-ci
+          ports:
+            - containerPort: 4004
+          # volumeMounts:
+          #   - mountPath: /var/lib/registry
+          #     name: container-registry-data
+          #   - name: container-registry-config
+          #     mountPath: /etc/docker/registry
+          imagePullPolicy: Always
+        - name: db
+          image: postgres
+          env:
+            - name: POSTGRES_DB
+              value: pg
+            - name: POSTGRES_USER
+              value: pg
+            - name: POSTGRES_PASSWORD
+              value: pg
+          volumeMounts:
+            - mountPath: /var/lib/postgresql
+              name: db
+          imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+        - name: regcred
+      volumes:
+        # - name: container-registry-config
+        #   configMap:
+        #     name: kubeflow-notebook-ci
+        #     items:
+        #       - key: config.yml
+        #         path: config.yml
+        # - name: container-registry-data
+        #   emptyDir: {}
+        - name: db
+          emptyDir: {}
+      # persistentVolumeClaim:
+      #   claimName: kubeflow-notebook-ci
+      restartPolicy: Always
+

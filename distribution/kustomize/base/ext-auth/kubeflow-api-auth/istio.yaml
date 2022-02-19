@@ -1,0 +1,20 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: kubeflow-api-auth
+spec:
+  gateways:
+    - kubeflow/kubeflow-gateway
+  hosts:
+    - "*"
+  http:
+    - match:
+        - uri:
+            prefix: /api-auth/
+      route:
+        - destination:
+            host: kubeflow-api-auth.auth.svc.cluster.local
+            port:
+              number: 80
+      rewrite:
+        uri: /

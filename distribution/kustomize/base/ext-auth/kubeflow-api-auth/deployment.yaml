@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubeflow-api-auth
+  labels:
+    app: kubeflow-api-auth
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3002
+  selector:
+    app: kubeflow-api-auth
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubeflow-api-auth
+spec:
+  selector:
+    matchLabels:
+      app: kubeflow-api-auth
+  template:
+    metadata:
+      labels:
+        app: kubeflow-api-auth
+    spec:
+      serviceAccountName: kubeflow-api-auth
+      containers:
+        - image: ghcr.io/tidunguyen/kubeflow-api-auth
+          imagePullPolicy: Always
+          name: kubeflow-api-auth
+          ports:
+            - containerPort: 3002
+          volumeMounts:
+            - name: dotenv
+              mountPath: /app/.env
+              subPath: server.env
+        - name: db
+          image: postgres
+          env:
+            - name: POSTGRES_DB
+              value: pg
+            - name: POSTGRES_USER
+              value: pg
+            - name: POSTGRES_PASSWORD
+              value: pg
+          volumeMounts:
+            - name: db
+              mountPath: /var/lib/postgresql/data
+          imagePullPolicy: IfNotPresent
+      volumes:
+        - name: dotenv
+          configMap:
+            name: kubeflow-api-auth
+        - name: db
+          persistentVolumeClaim:
+            claimName: kubeflow-api-auth
+      restartPolicy: Always
