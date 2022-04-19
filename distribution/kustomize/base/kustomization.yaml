@@ -30,7 +30,8 @@ resources:
   - ../../../upstream-manifests/apps/pipeline/upstream/env/platform-agnostic-multi-user
   # KFServing
   # ../- ../../../apps/kfserving/upstream/overlays/kubeflow # old kfserving
-  - https://raw.githubusercontent.com/kserve/kserve/v0.6.1/install/v0.6.1/kfserving_kubeflow.yaml
+  # - https://raw.githubusercontent.com/kserve/kserve/v0.6.1/install/v0.6.1/kfserving_kubeflow.yaml
+  - kfserving.yaml
   # Katib
   - ../../../upstream-manifests/apps/katib/upstream/installs/katib-with-kubeflow
   # Central Dashboard
